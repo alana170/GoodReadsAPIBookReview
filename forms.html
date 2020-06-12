@@ -1,23 +1,51 @@
 <html>
 
+<head>
+    <style>
+        label {
+          font-family: Arial, Helvetica, sans-serif;
+          font-weight: 200;
+        }
+        label,input{
+            align-items: center;
+        }
+
+        .chb{
+            padding:10px;
+        }
+        
+    </style>
+ </head>
+
 <body>
-    <form action="action_page.html" method ="post">
-        <label for="fname">First name:</label><br>
-        <input type="text" id="fname" name="fname"><br>
 
-        <label for="lname">Last name:</label><br>
-        <input type="text" id="lname" name="lname"> <br>
+    <form action="." method ="post" name = "form">
 
-        <label for="q1"> What is your favorite animal? </label><br>
-        <input type="text" id ="q1" name="q1"><br>
+        <label class ="form-group"> Name:</label><br>
+        <input type="text" name="name"><br><br><br>
 
-        <label for="chb">Accept to the terms and conditions by checking the box. </label>
-        <input type ="checkbox" id ="chb" name="chb"><br>
+        <label class ="form-group"> Age:</label><br>
+        <input type="text" name="age"> <br><br><br>
 
-        <label for="submit"> </label><br>
-        <input type="submit" id = "submit">
+        <label class ="form-group"> Date of Birth: </label><br>
+        <input type="date" name="dateofbirth"><br><br><br>
+
+        <label class ="form-group"> Accept to the terms and conditions by checking the box. </label>
+        <input type ="checkbox" name="chb" id ="chb"><br>
+
+        <label class ="btn-primary" for="submit"> </label><br>
+        <input type="submit" id = "submit" value ="Submit">
+
     </form>
 
 </body>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </html>
