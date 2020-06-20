@@ -6,13 +6,12 @@ app = Flask(__name__)
 def index():
     return render_template('forms.html')
 
-@app.route('/', method = ['POST'])
-def getValues():
-    name = request.form['fname']
-    age = request.form['lname']
-    db = request.form['q1']
+@app.route('/templates/action_page.html', method = ['POST'])
+def getValue():
+    name = request.form['name']
+    age = request.form['age']
+    db = request.form['dateofbirth']
     return render_template('action_page.html', n = name, age = age, db =db)
-
 
 
 if __name__=='__main__' :
