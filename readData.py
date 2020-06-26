@@ -1,22 +1,28 @@
 import pyodbc, csv, requests, json
-
+import traceback
 conn = pyodbc.connect('Driver={SQL Server};'
                       'Server=DESKTOP-5DCQASK;'
                       'Database=Books;'
                       'Trusted_Connection=yes;')
  
 cursor = conn.cursor()
-f = open("C:/Users/sgoru/project1/project1/Books_test.csv")
+f = open("C:/Users/sgoru/project1/project1/books.csv")
 reader = csv.reader(f)
 
 for isbn, title, author, year in reader:
     if(reader.line_num>1) : 
         par = {"key": "LwFswiQvej8jy0XQShrEA", "isbns": isbn}
-        res = requests.get("https://www.goodreads.com/book/review_counts.json", params=par)
-        s1 = ""
-        s1 = res.json()
-        data = json.dumps(s1)
-        data_dict = json.loads(data)
+        try:
+            res = requests.get("https://www.goodreads.com/book/review_counts.json", params=par)
+            s1 = ""
+            s1 = res.json()
+            data = json.dumps(s1)
+            data_dict = json.loads(data)
+        except Exception as err:
+            sqltext = "INSERT INTO Books.dbo.ErrorTable(Error) VALUES ('" +repr(err).replace("'", "''")+ "')"
+            print("SQL: " + sqltext)
+            cursor.execute(sqltext)
+        
 
         for item in data_dict['books']:
             # get info from goodreads and insert into sql table Book Ratings 
@@ -25,10 +31,6 @@ for isbn, title, author, year in reader:
             cursor.commit()
 
 cursor.close()
-   
-
-
-
 
 #for id, isbn, isbn13, ratings_count, reviews_count, text_reviews_count, work_ratings_count, work_reviews_count, work_text_reviews_count, average_rating in res.json():
      #cursor.execute("INSERT INTO BookRatingTable.dbo.Book () VALUES "+ "('"+isbn+"','"+title.replace("'","''")+"' , '"+author.replace("'","''") + "'," +year + ")")
