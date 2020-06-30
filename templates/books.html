@@ -20,7 +20,7 @@
     {% for book in books: %}
         <tr>
         <td>
-            {{book.Isbn}}
+          <a href='/book/{{book.Isbn}}'>  {{book.Isbn}} </a>
         </td>
         <td>
             {{book.Title}}

@@ -1,16 +1,18 @@
 import sqlite3
 import csv 
 
-connection = sqlite3.connect('db/book.db')
+connection = sqlite3.connect('db/book2.db')
 cursor = connection.cursor()
 
+""" 
 sql = ''' CREATE TABLE IF NOT EXISTS Book
             (BookID INTEGER PRIMARY KEY AUTOINCREMENT,
 	        Isbn varchar(100),
 	        Title varchar(255) ,
 	        Author varchar(255) ,
 	        Year INTEGER)'''
-cursor.execute(sql)
+cursor.execute(sql) 
+"""
 
 f = open("C:/Users/sgoru/project1/project1/books.csv")
 reader = csv.reader(f)
