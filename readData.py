@@ -22,6 +22,7 @@ for isbn, title, author, year in reader:
             sqltext = "INSERT INTO Books.dbo.ErrorTable(Error) VALUES ('" +repr(err).replace("'", "''")+ "')"
             print("SQL: " + sqltext)
             cursor.execute(sqltext)
+            cursor.commit()
         
 
         for item in data_dict['books']:
@@ -35,8 +36,6 @@ cursor.close()
 #for id, isbn, isbn13, ratings_count, reviews_count, text_reviews_count, work_ratings_count, work_reviews_count, work_text_reviews_count, average_rating in res.json():
      #cursor.execute("INSERT INTO BookRatingTable.dbo.Book () VALUES "+ "('"+isbn+"','"+title.replace("'","''")+"' , '"+author.replace("'","''") + "'," +year + ")")
 #     print(id, isbn13)
-     
-conn.commit()
 
 
 
