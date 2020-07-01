@@ -4,15 +4,34 @@ body {
     font-weight: 200;
 }
 
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+  }
+
 #bookTable{
     text-align: center;
     padding: 100px;
+    margin: 50px;
+    border-spacing: 5px;
     align-content: center;
-    background-color: lightslategray;
     color: black
 }
 
 #th {
-    background-color: lightblue;
+    background-color: #2b59c4 ;
     font-style: bold;
+}
+
+#headerRow{
+    color: white;
+    padding: 50px;
 }
