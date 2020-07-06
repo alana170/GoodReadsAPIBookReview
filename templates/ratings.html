@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+
+{% if(errM != "") %}
+<h3> Oh No! There has been an error...  </h3>
+{{errM}}
+{%else%}
+
+<div class="panel panel-primary w-50 align-self-center centered" >
+    <div class="panel-heading"> <h1>Rating Information for  <b> {{bookInfo.Title}} </b></h1>
+        <h2><i> By: {{bookInfo.Author}} </i> </h2></div>
+
+    <div class="panel-body w-50 align-self-center centered">
+        {% for rating in data.books %} 
+            <h4>ID:  {{ rating.id }}</h4>
+            <h4>ISBN:  {{ rating.isbn }}</h4>
+            <h4>ISBN13:  {{ rating.isbn13 }}</h4>
+            
+            <h4>Average Rating: {{rating.average_rating}}</h4>
+            <h4>
+            {% if avg == 1 %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {% elif avg == 2  %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {% elif avg == 3 %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {% elif avg == 4 %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            {% else %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span> 
+            {% endif %}
+            </h4>
+            <h4># of Ratings:  {{ rating.ratings_count }}</h4>
+            <h4># of Reviews:  {{ rating.reviews_count }}</h4>
+            <h4># of Text Reviews:  {{ rating.text_reviews_count }}</h4>
+            <h4># of Work Ratings:  {{ rating.work_ratings_count }}</h4>
+            <h4># of Work Reviews:  {{ rating.work_reviews_count }}</h4>
+            <h4># of Work Text Reviews: {{rating.work_text_reviews_count}}</h4>
+        {%endfor%}
+    </div>
+
+  </div>
+</div>
+{%endif%}
+
+{% endblock %}

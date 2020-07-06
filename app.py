@@ -1,7 +1,9 @@
+import requests, json
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import csv
-
+import datetime
+from sqlalchemy import or_
 #from sqlalchemy import create_engine
 #from flask import Flask, render_template, request, url_for
 
@@ -19,20 +21,42 @@ class Book(db.Model):
     def __repr__(self):
         return 'Book ID = ' + str(self.BookID)
 
+class User(db.Model):
+    UserID = db.Column(db.Integer, primary_key = True)
+    Email = db.Column(db.String(100), unique=True)
+    Username = db.Column(db.String(50), unique=True, nullable=False)
+    Password = db.Column(db.String(50), unique=False, nullable=False)
+    Created = db.Column(db.DateTime())
 
-@app.route('/books')
+    def __repr__(self):
+        return 'User ID = ' + str(self.UserID)
+
+
+@app.route('/books', methods=['GET', 'POST'])
 def index(): 
+    if request.method == 'POST':
+        if request.form['search'] != '':
+            results = Book.query.filter(or_("%" + Book.Title.like(request.form['search'] + "%"),
+            Book.Author.like("%" + request.form['search'] + "%"),
+            Book.Isbn.like("%" + request.form['search'] + "%"))).all() 
+            return render_template('books.html', books = results)
+        else:
+            return redirect(url_for('index'))
     return render_template('books.html', books = Book.query.all())
+
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
     error = None
-    if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid Credentials. Please try again.'
-        else:
+    if request.method == 'POST' :
+        user = db.session.query(User).filter_by(Username = request.form['username']).one()
+        if user.Password == request.form['password'] :
             return redirect(url_for('index'))
-    return render_template('login.html', error=error)
+        else:
+            error = 'Invalid Credentials. Please try again.'
+            return render_template('login.html', error=error)
+    else:
+        return render_template('login.html', error=error)
 
 @app.route('/uploadFile')   
 def uploadFile():
@@ -46,23 +70,37 @@ def uploadFile():
                 db.session.commit()
     return 'File Uploaded'
     
-# @app.route('/book/<string: isbn>')
-# def ratingInfoByISBN():
-#     return 'Rating Info Goes Here'
+@app.route('/book/<Isbn>')
+def ratingInfoByISBN(Isbn):
+    bookInfo= db.session.query(Book).filter_by(Isbn = Isbn).first() 
+    errM = "" 
+    par = {"key": "LwFswiQvej8jy0XQShrEA", "isbns": Isbn}
+    try:
+        res = requests.get("https://www.goodreads.com/book/review_counts.json", params=par)          
+        s1 = ""
+        s1 = res.json()
+        data = json.dumps(s1)
+        data_dict = json.loads(data)
+        avg = int(float(data_dict['books'][0]['average_rating']))
+        
+    except Exception as err:
+        errM = repr(err)
+    return render_template('ratings.html', data = s1, errM = errM, bookInfo = bookInfo, avg=avg)
 
-
-
-"""
-@app.route('/', method = ['POST', 'GET'])
-def getValue():
+@app.route('/signup', methods = ['GET','POST'])
+def register():
     if request.method == 'POST':
-        isbn = request.form['isbn']
-        title = request.form['title']
-        author = request.form['author']
-        year = request.form['year']
-    else:
-        return render_template('books.html')
- """  
+        new_user = User(
+            Email =request.form['email'], 
+            Username = request.form['username'],
+            Password = request.form['password'],
+            Created = datetime.datetime.now())
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('login'))
+    else: 
+        return render_template('signup.html')
+
 
 if __name__=='__main__' :
     app.run(debug=True)
