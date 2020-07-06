@@ -1,11 +1,19 @@
-<html>
+<!DOCTYPE html>
+<html lang = "en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel= "stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </head>
-  <body>
-    <div class="container">
-      <h1>Login: </h1>
+  <body id = "bookbkg">
+    <div class="container-fluid centered">
+    <div id = "box">
+      <br>
+      <h1 style = "font-family: fantasy; color:#0e3391"> AmazingReads </h1>
+      <br>
+      <h1 class = "fontbody">Login </h1>
       <br>
       <form action="" method="post">
         <input type="text" placeholder="Username" name="username" value="{{
@@ -16,13 +24,18 @@
           request.form.password }}">
           <br>
           <br>
-        <input class="btn btn-default" type="submit" value="Login" style="text-align: center; align-items: center;">
+        <input class="btn btn-primary" type="submit" value="Login" style="text-align: center; align-items: center;">
+        <br><br>
+        <a href = "/signup"> Create Your Account </a>
       </form>
-      <a href = "/signup"> New User? Sign Up Here. </a>
-     
+      
+      <br>
+
       {% if error %}
         <p class="error"><strong>{{ error }}</strong>  </p>
       {% endif %}
     </div>
+    </div>
+    
   </body>
 </html>

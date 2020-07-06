@@ -102,3 +102,32 @@ table {
 .error {
   color: red;
 }
+
+#loginform{
+  align-content: center;
+  margin: auto;
+  width: 50%;
+
+}
+
+.fontbody {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#bookbkg {
+  background-image: linear-gradient(#0e3391, white);
+  height: 100%; 
+  width: 100%;
+  background-size: 100%;
+  min-height: 100%;
+  
+}
+
+#box{
+  background-color:lightcyan; 
+  width:40%; 
+  height:550px; 
+  margin-left: 30%; 
+  margin-right:30%; 
+  border-radius: 25px;
+}

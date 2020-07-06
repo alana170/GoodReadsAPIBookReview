@@ -83,6 +83,7 @@ def uploadFile():
     
 @app.route('/book/<Isbn>')
 def ratingInfoByISBN(Isbn):
+    avg = int(0)
     bookInfo= db.session.query(Book).filter_by(Isbn = Isbn).first() 
     errM = "" 
     par = {"key": "LwFswiQvej8jy0XQShrEA", "isbns": Isbn}
@@ -93,9 +94,9 @@ def ratingInfoByISBN(Isbn):
         data = json.dumps(s1)
         data_dict = json.loads(data)
         avg = int(float(data_dict['books'][0]['average_rating']))
-        
     except Exception as err:
         errM = repr(err)
+
     return render_template('ratings.html', data = s1, errM = errM, bookInfo = bookInfo, avg=avg)
 
 @app.route('/signup', methods = ['GET','POST'])
@@ -114,8 +115,7 @@ def register():
 
 @app.route('/logout')
 def logout() : 
-    error = "You have successfully logged out!"
-    return render_template('login.html', error = error)
+    return render_template('logout.html')
 
 
 if __name__=='__main__' :
