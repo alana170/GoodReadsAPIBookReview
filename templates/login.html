@@ -18,13 +18,10 @@
           <br>
         <input class="btn btn-default" type="submit" value="Login" style="text-align: center; align-items: center;">
       </form>
-      
-      <form action ="/signup">
-        <button> New User? Sign Up Here. </button>
-      </form>
-
+      <a href = "/signup"> New User? Sign Up Here. </a>
+     
       {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }}
+        <p class="error"><strong>{{ error }}</strong>  </p>
       {% endif %}
     </div>
   </body>

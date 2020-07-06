@@ -7,17 +7,20 @@
 {% block body %}
 
 <div class ="content">
-<br><br>
-<h1 style="text-align: center;"> Books</h1>
 
-<div class="search-container">
+<h1 style="text-align: center;">Books</h1>
+
+<div class = "centered">
     <form action="" method = "POST">
       <input type="text" placeholder="Search.." name="search">
       <button type="submit"><i class="fa fa-search"></i></button>
     </form>
+    <form action ="/books">
+    <button style ="margin: 10px; padding: 2px;"> Reset </button>
+    </form>
 </div>
-{% if books.count()==0 %}
-<p> No results were found for your search </p>
+{% if message != "" %}
+{{message}}
 {%else%}
 <table id = "bookTable" class= "bookTable" style="padding:50px; align-content: center; text-align:left; border: 1px solid black; border-collapse:collapse; width:75%; padding:50px; border-spacing: 10px; margin-left:auto;margin-right:auto;">
     <tr id = "headerRow" style = "padding:50px; margin:20px; border: 1px solid black; font-weight: bold; color: white">

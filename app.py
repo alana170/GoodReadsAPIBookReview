@@ -3,13 +3,14 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import csv
 import datetime
-from sqlalchemy import or_
+from sqlalchemy import or_, func 
+#from flask.ext.session import Session
 #from sqlalchemy import create_engine
-#from flask import Flask, render_template, request, url_for
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///book3.db'
 db = SQLAlchemy(app)
+session = requests.Session()
 
 class Book(db.Model):
     BookID = db.Column(db.Integer, primary_key = True)
@@ -35,28 +36,38 @@ class User(db.Model):
 @app.route('/books', methods=['GET', 'POST'])
 def index(): 
     if request.method == 'POST':
+        mesg = ''
         if request.form['search'] != '':
-            results = Book.query.filter(or_("%" + Book.Title.like(request.form['search'] + "%"),
+            results = Book.query.filter(or_(Book.Title.like("%" +request.form['search'] + "%"),
             Book.Author.like("%" + request.form['search'] + "%"),
             Book.Isbn.like("%" + request.form['search'] + "%"))).all() 
-            return render_template('books.html', books = results)
+            if Book.query.filter(or_(Book.Title.like("%" + request.form['search'] + "%"),
+            Book.Author.like("%" + request.form['search'] + "%"),
+            Book.Isbn.like("%" + request.form['search'] + "%"))).count() == 0: 
+                mesg = "No search results found"
+            return render_template('books.html', books = results, message = mesg)
         else:
             return redirect(url_for('index'))
-    return render_template('books.html', books = Book.query.all())
+    return render_template('books.html', books = Book.query.all(), message = "")
 
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST' :
-        user = db.session.query(User).filter_by(Username = request.form['username']).one()
-        if user.Password == request.form['password'] :
-            return redirect(url_for('index'))
+        if request.form['username'] != "" and request.form['password'] != "" :
+            if db.session.query(User).filter_by(Username = request.form['username']).count() != 0 : 
+                user = db.session.query(User).filter_by(Username = request.form['username']).one()
+                if user.Password == request.form['password'] :
+                    return redirect(url_for('index'))
+                else:
+                    error = 'Invalid Credentials. Please try again.'
+            else:
+                error = "Invalid Credentrial. Please try again."
         else:
-            error = 'Invalid Credentials. Please try again.'
-            return render_template('login.html', error=error)
-    else:
-        return render_template('login.html', error=error)
+            error = "Please Enter Values"
+    
+    return render_template('login.html', error = error)
 
 @app.route('/uploadFile')   
 def uploadFile():
@@ -100,6 +111,11 @@ def register():
         return redirect(url_for('login'))
     else: 
         return render_template('signup.html')
+
+@app.route('/logout')
+def logout() : 
+    error = "You have successfully logged out!"
+    return render_template('login.html', error = error)
 
 
 if __name__=='__main__' :

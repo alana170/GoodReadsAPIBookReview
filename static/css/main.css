@@ -83,7 +83,7 @@ table {
 #bookTable{
     text-align: center;
     padding: 100px;
-    margin: 50px;
+    margin: 20px;
     border-spacing: 5px;
     align-content: center;
     color: black
@@ -97,4 +97,8 @@ table {
 #headerRow{
     color: white;
     padding: 50px;
+}
+
+.error {
+  color: red;
 }
