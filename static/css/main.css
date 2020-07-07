@@ -169,3 +169,11 @@ table {
     display: inline;
     vertical-align: middle;
 }
+
+.reviewInfo{
+  background-color:rgb(182, 196, 201); 
+  width:auto; 
+  height:auto; 
+  border-radius: 10px;
+  padding:10px;
+}

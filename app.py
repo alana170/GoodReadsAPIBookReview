@@ -1,5 +1,5 @@
 import requests, json
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 import csv
 import datetime
@@ -8,9 +8,9 @@ from sqlalchemy import or_, func
 #from sqlalchemy import create_engine
 
 app = Flask(__name__)
+app.secret_key = 'alana170project1'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///book3.db'
 db = SQLAlchemy(app)
-session = requests.Session()
 
 class Book(db.Model):
     BookID = db.Column(db.Integer, primary_key = True)
@@ -32,9 +32,19 @@ class User(db.Model):
     def __repr__(self):
         return 'User ID = ' + str(self.UserID)
 
+class Review(db.Model):
+    BookID = db.Column(db.Integer())
+    ReviewID = db.Column(db.Integer(), primary_key = True)
+    Username = db.Column(db.String(50), nullable=False)
+    RatingNumber = db.Column(db.Integer(), nullable=False, default=0)
+    Opinion = db.Column(db.String(2000))
+    Created = db.Column(db.DateTime())
+
 
 @app.route('/books', methods=['GET', 'POST'])
-def index(): 
+def index():
+    if 'username' in session:
+        username = session['username']
     if request.method == 'POST':
         mesg = ''
         if request.form['search'] != '':
@@ -59,6 +69,7 @@ def login():
             if db.session.query(User).filter_by(Username = request.form['username']).count() != 0 : 
                 user = db.session.query(User).filter_by(Username = request.form['username']).one()
                 if user.Password == request.form['password'] :
+                    session['username'] = request.form['username']
                     return redirect(url_for('index'))
                 else:
                     error = 'Invalid Credentials. Please try again.'
@@ -81,10 +92,16 @@ def uploadFile():
                 db.session.commit()
     return 'File Uploaded'
     
-@app.route('/book/<Isbn>')
+@app.route('/book/<Isbn>', methods=['GET', 'POST'])
 def ratingInfoByISBN(Isbn):
-    #if request.method == "POST" :
-    # add to goodreads api and change data 
+    username = "anonymous" 
+    if 'username' in session:
+        username = session['username']
+    bookid = db.session.query(Book).filter_by(Isbn = Isbn).first().BookID
+    if request.method == "POST" :
+        new_review = Review(BookID = bookid, Username= username , RatingNumber= request.form['opt'], Opinion= request.form['opinion'], Created = datetime.datetime.now() )
+        db.session.add(new_review) 
+        db.session.commit()
     avg = int(0)
     bookInfo= db.session.query(Book).filter_by(Isbn = Isbn).first() 
     errM = "" 
@@ -98,8 +115,8 @@ def ratingInfoByISBN(Isbn):
         avg = int(float(data_dict['books'][0]['average_rating']))
     except Exception as err:
         errM = repr(err)
-
-    return render_template('ratings.html', data = s1, errM = errM, bookInfo = bookInfo, avg=avg)
+    Reviews = db.session.query(Review).filter_by(BookID = bookid).all()
+    return render_template('ratings.html', data = s1, errM = errM, bookInfo = bookInfo, avg=avg, reviews = Reviews)
 
 @app.route('/signup', methods = ['GET','POST'])
 def register():
@@ -117,7 +134,12 @@ def register():
 
 @app.route('/logout')
 def logout() : 
-    return render_template('logout.html')
+    username = "anonymous"
+    if 'username' in session:
+        username = session['username']
+        mesg = username + " has successfully logged out."
+        session.pop('username', None)
+    return render_template('logout.html', message = mesg)
 
 
 if __name__=='__main__' :

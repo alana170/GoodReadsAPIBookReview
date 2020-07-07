@@ -11,7 +11,7 @@
 {{errM}}
 {%else%}
 
-<div class="panel panel-primary w-50 align-self-center centered" >
+<div class="panel panel-primary w-50 align-self-center centered">
     <div class="panel-heading">
         <h1>Rating Information for  <b> {{bookInfo.Title}} </b></h1>
         <h2><i> By: {{bookInfo.Author}} </i> </h2>
@@ -96,7 +96,7 @@
 
             <label class ="form-group" for="opinion"> What is your opinion about the book?</label>
             <br>
-            <textarea rows="5" cols="60" placeholder="Write about your opinion on this book in a few words."></textarea>
+            <textarea rows="5" cols="60" name = "opinion" placeholder="Write about your opinion on this book in a few words."></textarea>
             <br><br><br>
             <input class="btn btn-primary" type="submit" value="Submit">
             <br><br>
@@ -104,6 +104,53 @@
     </div>
   </div>
 </div>
+
+<div>
+    <h4><b>Reviews </b></h4>
+    {% for review in reviews: %}
+    <div class= "reviewInfo">
+    <h3 style="float:right">{{review.Opinion}}</h3>
+    <h3> {{review.Username}} </h3>
+    {% if review.RatingNumber == 1%}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {% elif review.RatingNumber == 2 %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {% elif  review.RatingNumber == 3 %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            {% elif review.RatingNumber == 4 %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            {% else %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span> 
+
+        <br>
+        {{review.Created}}
+        
+    </div>
+    <br><br>
+    {%endif%}
+    {% endfor%}
+</div>
+
 {%endif%}
 
 {% endblock %}
