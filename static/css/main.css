@@ -69,17 +69,23 @@ body {
   }
 
 table {
-    font-family: arial, sans-serif;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     border-collapse: collapse;
     width: 100%;
+    border-spacing: 15px;
+    border-radius: 15px;
   }
-  
+
   td, th {
     border: 1px solid black;
     text-align: left;
     padding: 20px;
+    height: 25px;
   }
 
+  tr {
+    padding: 50px;
+  }
 #bookTable{
     text-align: center;
     padding: 100px;
@@ -92,6 +98,10 @@ table {
 #th {
     background-color: #0e3391 ;
     font-style: bold;
+    height: 25px;
+    text-align: left;
+    padding: 10px;
+
 }
 
 #headerRow{
@@ -130,4 +140,32 @@ table {
   margin-left: 30%; 
   margin-right:30%; 
   border-radius: 25px;
+}
+
+#box2{
+  background-color:lightcyan; 
+  width:50%; 
+  height: 100vh; 
+  border-radius: 25px;
+  padding:20px;
+}
+
+#reset {
+  background-color:#ffe6f5;
+  color: #0e3391;
+  padding: 5px;
+}
+
+#search {
+  border-radius: 15px;
+}
+
+.button-container form,
+.button-container form div {
+    display: inline;
+}
+
+.button-container button {
+    display: inline;
+    vertical-align: middle;
 }

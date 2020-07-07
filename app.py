@@ -83,6 +83,8 @@ def uploadFile():
     
 @app.route('/book/<Isbn>')
 def ratingInfoByISBN(Isbn):
+    #if request.method == "POST" :
+    # add to goodreads api and change data 
     avg = int(0)
     bookInfo= db.session.query(Book).filter_by(Isbn = Isbn).first() 
     errM = "" 

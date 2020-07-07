@@ -12,10 +12,14 @@
 {%else%}
 
 <div class="panel panel-primary w-50 align-self-center centered" >
-    <div class="panel-heading"> <h1>Rating Information for  <b> {{bookInfo.Title}} </b></h1>
-        <h2><i> By: {{bookInfo.Author}} </i> </h2></div>
+    <div class="panel-heading">
+        <h1>Rating Information for  <b> {{bookInfo.Title}} </b></h1>
+        <h2><i> By: {{bookInfo.Author}} </i> </h2>
+    </div>
 
-    <div class="panel-body w-50 align-self-center centered">
+    <div class="panel-body w-50" id= "box2" style= "border-radius:0px; float:left; text-align: left; padding:40px">
+        <h4> GoodReads Rating Data</h4>
+        
         {% for rating in data.books %} 
             <h4>ID:  {{ rating.id }}</h4>
             <h4>ISBN:  {{ rating.isbn }}</h4>
@@ -63,7 +67,41 @@
             <h4># of Work Text Reviews: {{rating.work_text_reviews_count}}</h4>
         {%endfor%}
     </div>
+    <div style= "border-radius:0px; float:right; background-color: #ffe6f5; align-content: center; padding-bottom: 56px;" id= "box2">
+        <br>
+        <h4> Add a Rating for <i>{{bookInfo.Title}}</i></h4>
+        <form action="" method="POST">
+            <label class ="form-group"> Rate this book on a scale from 1 (worst) to 5 (best): </label>
+            <br>
+            <label  class="radio-inline" for="1">
+                <input type="radio" value="1" name ="opt"> 1
+            </label>
+            
+            <label  class="radio-inline" for="2">
+                <input type="radio" value="2" name ="opt"> 2
+            </label>
+            
+            <label  class="radio-inline" for="3">
+                <input type="radio" value="3" name ="opt"> 3
+            </label>
+            
+            <label class="radio-inline" for="4">
+                <input type="radio" value="4" name ="opt"> 4
+            </label>
+            
+            <label class="radio-inline" for="5">
+                <input type="radio" value="5" name ="opt"> 5
+            </label>
+            <br><br><br>
 
+            <label class ="form-group" for="opinion"> What is your opinion about the book?</label>
+            <br>
+            <textarea rows="5" cols="60" placeholder="Write about your opinion on this book in a few words."></textarea>
+            <br><br><br>
+            <input class="btn btn-primary" type="submit" value="Submit">
+            <br><br>
+        </form>
+    </div>
   </div>
 </div>
 {%endif%}
