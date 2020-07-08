@@ -151,15 +151,53 @@ def logout() :
     username = "anonymous"
     if 'username' in session:
         username = session['username']
-        mesg = username + " has successfully logged out."
+        if username == "anonymous" :
+            mesg = ""
+        else:
+            mesg = username + " has successfully logged out."
         session.pop('username', None)
     return render_template('logout.html', message = mesg)
 
 @app.route('/api/<Isbn>', methods=['GET', 'POST'])
-def apiAccess():
+def apiAccess(Isbn):
     if request.method == "GET" : 
-        
+        par = {"key": "LwFswiQvej8jy0XQShrEA", "isbns": Isbn}
+        try:
+            res = requests.get("https://www.goodreads.com/book/review_counts.json", params=par)          
+            s1 = ""
+            s1 = res.json()
+            data = json.dumps(s1)
+            data_dict = json.loads(data)
+            average_score = data_dict['books'][0]['average_rating']
+            review_count = data_dict['books'][0]['reviews_count']
+            isbn = Isbn
+            book = db.session.query(Book).filter_by(Isbn = isbn).one()
+            title = ""
+            author = ""
+            year = ""
+            if book is not None:
+                title = book.Title
+                author= book.Author
+                year= book.Year
 
+        except Exception as err:
+            errM = repr(err)
+
+        #st = '{"title":"'+ str(title)+ '", "author":"' +str(author)+ '", "year":' +str(year)+', "isbn":"' +str(isbn)+ '","review_count":' +str(review_count)+ ', "average_score":' +str(average_score)+ '}'
+        st = {
+            "title": title,
+            "author": author,
+            "year": year,
+            "isbn": isbn,
+            "review_count": review_count,
+            "average_score": average_score
+        }
+        result = json.dumps(st, indent=2)
+        return result
+
+@app.errorhandler(404) 
+def not_found(e): 
+  return render_template("404.html") 
 
 
 if __name__=='__main__' :
