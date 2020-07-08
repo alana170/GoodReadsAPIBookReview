@@ -2,10 +2,9 @@ import requests, json
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 import csv
-import datetime
+from datetime import datetime
 from sqlalchemy import or_, func 
-#from flask.ext.session import Session
-#from sqlalchemy import create_engine
+import datetime
 
 app = Flask(__name__)
 app.secret_key = 'alana170project1'
@@ -94,6 +93,7 @@ def uploadFile():
     
 @app.route('/book/<Isbn>', methods=['GET', 'POST'])
 def ratingInfoByISBN(Isbn):
+    flag = False
     username = "anonymous" 
     if 'username' in session:
         username = session['username']
@@ -115,22 +115,36 @@ def ratingInfoByISBN(Isbn):
         avg = int(float(data_dict['books'][0]['average_rating']))
     except Exception as err:
         errM = repr(err)
+
     Reviews = db.session.query(Review).filter_by(BookID = bookid).all()
-    return render_template('ratings.html', data = s1, errM = errM, bookInfo = bookInfo, avg=avg, reviews = Reviews)
+    for review in Reviews:
+        if review.Created is not None : 
+            t = review.Created
+            review.Created = t.strftime('%m/%d/%Y %I:%M %p')
+        else:
+            review.Created = ""
+        if review.Username == username:
+            flag = True
+        
+    return render_template('ratings.html', data = s1, errM = errM, bookInfo = bookInfo, avg=avg, reviews = Reviews, reviewedflag = flag)
 
 @app.route('/signup', methods = ['GET','POST'])
 def register():
     if request.method == 'POST':
-        new_user = User(
+        if db.session.query(User).filter_by(Username = request.form['username']).one() is not None :
+            message = "Username already exists"
+            return render_template('signup.html', message = message)
+        else:
+            new_user = User(
             Email =request.form['email'], 
             Username = request.form['username'],
             Password = request.form['password'],
             Created = datetime.datetime.now())
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('login'))
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('login'))
     else: 
-        return render_template('signup.html')
+        return render_template('signup.html', message= "")
 
 @app.route('/logout')
 def logout() : 
@@ -140,6 +154,12 @@ def logout() :
         mesg = username + " has successfully logged out."
         session.pop('username', None)
     return render_template('logout.html', message = mesg)
+
+@app.route('/api/<Isbn>', methods=['GET', 'POST'])
+def apiAccess():
+    if request.method == "GET" : 
+        
+
 
 
 if __name__=='__main__' :

@@ -13,11 +13,11 @@
 
 <div class="panel panel-primary w-50 align-self-center centered">
     <div class="panel-heading">
-        <h1>Rating Information for  <b> {{bookInfo.Title}} </b></h1>
-        <h2><i> By: {{bookInfo.Author}} </i> </h2>
+        <h1 class = "fontbody">Rating Information for  <b> {{bookInfo.Title}} </b> ({{bookInfo.Year}})</h1>
+        <h2 class = "fontbody"><i> By: {{bookInfo.Author}} </i> </h2>
     </div>
 
-    <div class="panel-body w-50" id= "box2" style= "border-radius:0px; float:left; text-align: left; padding:40px">
+    <div class="panel-body w-50 fontbody" id= "box2" style= "border-radius:0px; float:left; text-align: left; padding:40px">
         <h4> GoodReads Rating Data</h4>
         
         {% for rating in data.books %} 
@@ -69,8 +69,12 @@
     </div>
     <div style= "border-radius:0px; float:right; background-color: #ffe6f5; align-content: center; padding-bottom: 56px;" id= "box2">
         <br>
-        <h4> Add a Rating for <i>{{bookInfo.Title}}</i></h4>
+        {% if reviewedflag == False %}
+
+        <h4 class = "fontbody"> Add a Rating for <i>{{bookInfo.Title}}</i></h4>
+        
         <form action="" method="POST">
+            <div class = "fontbody">
             <label class ="form-group"> Rate this book on a scale from 1 (worst) to 5 (best): </label>
             <br>
             <label  class="radio-inline" for="1">
@@ -96,11 +100,18 @@
 
             <label class ="form-group" for="opinion"> What is your opinion about the book?</label>
             <br>
-            <textarea rows="5" cols="60" name = "opinion" placeholder="Write about your opinion on this book in a few words."></textarea>
+            <textarea rows="5" cols="40" name = "opinion" placeholder="Write your opinion about this book in a few words."></textarea>
             <br><br><br>
             <input class="btn btn-primary" type="submit" value="Submit">
+            </div>
             <br><br>
         </form>
+        {%else%}
+        <h3 class ="fontbody"> Review Already Posted for this Book </h3>
+        <h4 class ="fontbody"> Thank you for submitting a post! </h4>
+
+        {% endif %}
+
     </div>
   </div>
 </div>
@@ -109,8 +120,13 @@
     <h4><b>Reviews </b></h4>
     {% for review in reviews: %}
     <div class= "reviewInfo">
-    <h3 style="float:right">{{review.Opinion}}</h3>
+
+    <h3 class="opinion" style="float:right"> {{review.Opinion}} </h3>
+
+    <h5> {{ review.Created }} </h5>
+                
     <h3> {{review.Username}} </h3>
+
     {% if review.RatingNumber == 1%}
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star"></span>
@@ -141,13 +157,12 @@
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span> 
-
-        <br>
-        {{review.Created}}
+            <br>
+            {%endif%}
         
     </div>
     <br><br>
-    {%endif%}
+   
     {% endfor%}
 </div>
 

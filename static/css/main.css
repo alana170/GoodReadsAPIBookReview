@@ -145,7 +145,7 @@ table {
 #box2{
   background-color:lightcyan; 
   width:50%; 
-  height: 100vh; 
+  height:450px; 
   border-radius: 25px;
   padding:20px;
 }
@@ -171,9 +171,15 @@ table {
 }
 
 .reviewInfo{
-  background-color:rgb(182, 196, 201); 
+  background-color:lightgoldenrodyellow; 
   width:auto; 
   height:auto; 
   border-radius: 10px;
   padding:10px;
-}
+} 
+
+ .opinion{
+  float:right;
+  vertical-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
