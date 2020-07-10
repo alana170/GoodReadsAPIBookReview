@@ -131,8 +131,11 @@ def ratingInfoByISBN(Isbn):
 @app.route('/signup', methods = ['GET','POST'])
 def register():
     if request.method == 'POST':
-        if db.session.query(User).filter_by(Username = request.form['username']).one() is not None :
-            message = "Username already exists"
+        if db.session.query(User).filter_by(Email = request.form['email']).count() > 0 :
+            message = "Email already exists."
+            return render_template('signup.html', message = message)
+        elif db.session.query(User).filter_by(Username = request.form['username']).count() > 0 :
+            message = "Username already exists."
             return render_template('signup.html', message = message)
         else:
             new_user = User(
